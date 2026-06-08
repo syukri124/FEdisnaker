@@ -8,6 +8,7 @@ import LpkAktif from './pages/LpkAktif';
 import LpkNonaktif from './pages/LpkNonaktif';
 import Pelatihan from './pages/Pelatihan';
 import Users from './pages/Users';
+import Placeholder from './pages/Placeholder';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -96,6 +97,24 @@ export default function App() {
                 </>
               )}
 
+              {/* PENTA Routes */}
+              {['admin', 'penta', 'pejabat'].includes(user.role) && (
+                <>
+                  <Route path="/penta/lowongan" element={<Placeholder />} />
+                  <Route path="/penta/tenaga-kerja" element={<Placeholder />} />
+                  <Route path="/penta/rekap" element={<Placeholder />} />
+                </>
+              )}
+
+              {/* PHI Routes */}
+              {['admin', 'phi', 'pejabat'].includes(user.role) && (
+                <>
+                  <Route path="/phi/pkwt" element={<Placeholder />} />
+                  <Route path="/phi/pengaduan" element={<Placeholder />} />
+                  <Route path="/phi/peraturan" element={<Placeholder />} />
+                </>
+              )}
+
               {/* ADMIN ONLY Routes */}
               {user.role === 'admin' && (
                 <Route path="/users" element={<Users onRoleSwitch={handleRoleSwitch} />} />
@@ -110,3 +129,4 @@ export default function App() {
     </Router>
   );
 }
+
