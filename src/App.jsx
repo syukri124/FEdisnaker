@@ -52,10 +52,6 @@ export default function App() {
     );
   }
 
-  // If not authenticated, render Login Page
-  if (!user) {
-    return <Login onLogin={handleLogin} />;
-  }
 
   return (
     <Router>
