@@ -59,73 +59,91 @@ export default function App() {
 
   return (
     <Router>
-      <div className="app-layout">
-        {/* Mobile Sidebar Overlay */}
-        <div 
-          className={`sidebar-overlay ${sidebarOpen ? 'show' : ''}`} 
-          id="sidebarOverlay" 
-          onClick={toggleSidebar}
-        ></div>
-
-        {/* Sidebar */}
-        <Sidebar 
-          role={user.role} 
-          isOpen={sidebarOpen} 
-          toggleSidebar={toggleSidebar} 
+      <Routes>
+        {/* Public Route: Login */}
+        <Route 
+          path="/login" 
+          element={user ? <Navigate to="/" replace /> : <Login onLogin={handleLogin} />} 
         />
 
-        {/* Content Wrapper */}
-        <div className="content-wrapper">
-          {/* Top Bar */}
-          <Topbar 
-            role={user.role} 
-            onLogout={handleLogout} 
-            toggleSidebar={toggleSidebar} 
-          />
+        {/* Protected Routes Wrapper */}
+        <Route 
+          path="/*" 
+          element={
+            !user ? (
+              <Navigate to="/login" replace />
+            ) : (
+              <div className="app-layout">
+                {/* Mobile Sidebar Overlay */}
+                <div 
+                  className={`sidebar-overlay ${sidebarOpen ? 'show' : ''}`} 
+                  id="sidebarOverlay" 
+                  onClick={toggleSidebar}
+                ></div>
 
-          {/* Main Router Content */}
-          <main className="main-content">
-            <Routes>
-              <Route path="/" element={<Dashboard role={user.role} />} />
-              
-              {/* LATTAS Routes */}
-              {['admin', 'lattas'].includes(user.role) && (
-                <>
-                  <Route path="/lattas/lpk-aktif" element={<LpkAktif />} />
-                  <Route path="/lattas/lpk-nonaktif" element={<LpkNonaktif />} />
-                  <Route path="/lattas/pelatihan" element={<Pelatihan />} />
-                </>
-              )}
+                {/* Sidebar */}
+                <Sidebar 
+                  role={user.role} 
+                  isOpen={sidebarOpen} 
+                  toggleSidebar={toggleSidebar} 
+                />
 
-              {/* PENTA Routes */}
-              {['admin', 'penta', 'pejabat'].includes(user.role) && (
-                <>
-                  <Route path="/penta/lowongan" element={<Placeholder />} />
-                  <Route path="/penta/tenaga-kerja" element={<Placeholder />} />
-                  <Route path="/penta/rekap" element={<Placeholder />} />
-                </>
-              )}
+                {/* Content Wrapper */}
+                <div className="content-wrapper">
+                  {/* Top Bar */}
+                  <Topbar 
+                    role={user.role} 
+                    onLogout={handleLogout} 
+                    toggleSidebar={toggleSidebar} 
+                  />
 
-              {/* PHI Routes */}
-              {['admin', 'phi', 'pejabat'].includes(user.role) && (
-                <>
-                  <Route path="/phi/pkwt" element={<Placeholder />} />
-                  <Route path="/phi/pengaduan" element={<Placeholder />} />
-                  <Route path="/phi/peraturan" element={<Placeholder />} />
-                </>
-              )}
+                  {/* Main Router Content */}
+                  <main className="main-content">
+                    <Routes>
+                      <Route path="/" element={<Dashboard role={user.role} />} />
+                      
+                      {/* LATTAS Routes */}
+                      {['admin', 'lattas'].includes(user.role) && (
+                        <>
+                          <Route path="/lattas/lpk-aktif" element={<LpkAktif />} />
+                          <Route path="/lattas/lpk-nonaktif" element={<LpkNonaktif />} />
+                          <Route path="/lattas/pelatihan" element={<Pelatihan />} />
+                        </>
+                      )}
 
-              {/* ADMIN ONLY Routes */}
-              {user.role === 'admin' && (
-                <Route path="/users" element={<Users onRoleSwitch={handleRoleSwitch} />} />
-              )}
+                      {/* PENTA Routes */}
+                      {['admin', 'penta', 'pejabat'].includes(user.role) && (
+                        <>
+                          <Route path="/penta/lowongan" element={<Placeholder />} />
+                          <Route path="/penta/tenaga-kerja" element={<Placeholder />} />
+                          <Route path="/penta/rekap" element={<Placeholder />} />
+                        </>
+                      )}
 
-              {/* Fallback route */}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </main>
-        </div>
-      </div>
+                      {/* PHI Routes */}
+                      {['admin', 'phi', 'pejabat'].includes(user.role) && (
+                        <>
+                          <Route path="/phi/pkwt" element={<Placeholder />} />
+                          <Route path="/phi/pengaduan" element={<Placeholder />} />
+                          <Route path="/phi/peraturan" element={<Placeholder />} />
+                        </>
+                      )}
+
+                      {/* ADMIN ONLY Routes */}
+                      {user.role === 'admin' && (
+                        <Route path="/users" element={<Users onRoleSwitch={handleRoleSwitch} />} />
+                      )}
+
+                      {/* Fallback route */}
+                      <Route path="*" element={<Navigate to="/" replace />} />
+                    </Routes>
+                  </main>
+                </div>
+              </div>
+            )
+          }
+        />
+      </Routes>
     </Router>
   );
 }
